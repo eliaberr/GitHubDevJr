@@ -1,3 +1,7 @@
+
+var usersHistory=[]
+
+
 function procurar() {
 
     var user = document.getElementById("nameUser").value
@@ -10,11 +14,27 @@ function procurar() {
 
     $.getJSON(url, (user) => {
         showUserData(user)
+
+        if(isNew(user)){
+            saveHistory(user)
+            showNewUserHistory(user)
+        
+        }
+        
+
         clearError()
     }).fail(() => {
         showUserData({})
         showError("Nâo Encontrado!!")
     })
+}
+
+function saveHistory(user){
+    usersHistory.push(user);
+}
+
+function isNew(user){
+    return usersHistory.filter ((u) => u.login === user.login).length == 0;
 }
 
 function showError(msg) {
@@ -35,4 +55,8 @@ function showUserData(user) {
     document.getElementById("avatar_url").innerHTML = user.avatar_url ?
         `<img src="${user.avatar_url}" class="shadow rounded mt-1" width="200">` : ""
 }
-
+ function showNewUserHistory(user){
+    document.getElementById("history").innerHTML += `<div class="col">
+        <img src=${user.avatar_url} class="shadow rounded mt-1 mb-5" width="100"
+          id="avatar_url">`
+ }
