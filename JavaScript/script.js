@@ -1,37 +1,38 @@
-function procurar(){
-    
+function procurar() {
+
     var user = document.getElementById("nameUser").value
 
     var url = `https://api.github.com/users/${user}`
 
     //coletando dados
-    procurarId(nameUser, "name")
-    htmlUser = document.getElementById("html_url")
-    companyUser = document.getElementById("company")
-    mensegerErro = document.getElementById("erro")
+
+
 
     $.getJSON(url, (user) => {
-        limpar(mensegerErro)
-
-        nameUser.innerHTML = user.name;
-        htmlUser.innerHTML = user.html_url;
-        companyUser.innerHTML = 
-        `<img src="${user.avatar_url}" class="shadow rounded mt-1" width="200">`
+        showUserData(user)
+        clearError()
     }).fail(() => {
-        limpar(nameUser)
-        limpar(htmlUser)
-        limpar(companyUser)
-        
-        mensegerErro.innerHTML = `<div class="alert alert-danger" role="alert">
-        Usúario Não Encontrado!
-        </div>`
+        showUserData({})
+        showError("Nâo Encontrado!!")
     })
 }
 
-function limpar(limpar){
-    limpar.innerHTML = ""
+function showError(msg) {
+    document.getElementById("erro").innerHTML = `   <div class="alert alert-danger" role="alert">
+                                                            ${msg}
+                                                        </div>`
 }
 
-function procurarId(nomeVar, id){
-    nomeVar = document.getElementById($["id"])
+function clearError() {
+    document.getElementById("erro").innerHTML = ""
 }
+
+function showUserData(user) {
+    nameUser = document.getElementById("name").innerHTML = user.name || ""
+    htmlUser = document.getElementById("html_url").innerHTML = user.html_url || ""
+    companyUser = document.getElementById("company").innerHTML = user.company || ""
+
+    document.getElementById("avatar_url").innerHTML = user.avatar_url ?
+        `<img src="${user.avatar_url}" class="shadow rounded mt-1" width="200">` : ""
+}
+
